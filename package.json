@@ -1,0 +1,29 @@
+{
+  "name": "audio-player",
+  "version": "1.0.0",
+  "description": "a no style player",
+  "main": "dist/player.js",
+  "author": "wa7chliang",
+  "license": "MIT",
+  "scripts": {
+    "build-dev": "webpack --config build/webpack.dev.config.js",
+    "build-prod": "webpack --config build/webpack.prod.config.js",
+    "build": "npm run build-dev && npm run build-prod",
+    "start": "webpack-dev-server --config build/webpack.dev.config.js",
+    "lint": "eslint --fix src/*.js",
+    "format": "prettier-eslint --write src/*.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.5",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^5.15.1",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "prettier": "^1.16.4",
+    "prettier-eslint-cli": "^4.7.1",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3"
+  }
+}
