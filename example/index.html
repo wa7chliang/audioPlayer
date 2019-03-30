@@ -9,39 +9,69 @@
 </head>
 <body>
   <div id="player"></div>
+  <div id="player2"></div>
   <div id="k">开始</div>
   <div id="z">暂停</div>
   <div id="q">切换</div>
   <div id="x">下一首</div>
   <div id="s">上一首</div>
+  <div id="buff">已缓冲 0%</div>
+  <div id="current">已播放 0%</div>
+  <div id="k2">开始2</div>
   <script>
-    var Player = player.default
-    var a = new Player({
-      el: '#player',
-      songList: [
-        'http://m701.music.126.net/20190319224204/e30c327d47f61e6a3e2586c7d5dda5a9/jdyyaac/530c/515a/0e5f/df60c5228bf0f7c2003c95bbbe584e86.m4a',
-        'http://m701.music.126.net/20190319222431/7b189ca9cb540e8a52ede47f803cef9e/jdyyaac/5552/5158/5358/b8bb114466f257b727d4d2f8f9a5fc32.m4a'
-      ]
-    })
+    function haveSong(songList) {
+      var Player = player.default
+      var a = new Player({
+        el: '#player',
+        songList: songList
+      })
 
-    document.getElementById('k').onclick = function () {
-      a.play()
+      var b = new Player({
+        el: '#player2',
+        songList: songList
+      })
+
+      document.getElementById('k').onclick = function () {
+        a.play()
+      }
+
+      document.getElementById('k2').onclick = function () {
+        b.play()
+      }
+
+      document.getElementById('z').onclick = function () {
+        a.pause()
+      }
+
+      document.getElementById('q').onclick = function () {
+        a.toggle()
+      }
+
+      document.getElementById('x').onclick = function () {
+        a.next()
+      }
+
+      document.getElementById('s').onclick = function () {
+        a.prev()
+      }
+      setInterval(function () {
+        document.getElementById('buff').innerHTML = '已缓冲' + a.getBufferedPercent() + '%'
+        document.getElementById('current').innerHTML = '已播放' + a.getCurrentTimePercent() + '%'
+      }, 1000)
     }
 
-    document.getElementById('z').onclick = function () {
-      a.pause()
-    }
-
-    document.getElementById('q').onclick = function () {
-      a.toggle()
-    }
-
-    document.getElementById('x').onclick = function () {
-      a.next()
-    }
-
-    document.getElementById('s').onclick = function () {
-      a.prev()
+    if (sessionStorage.getItem('song')) {
+      var songList = JSON.parse(sessionStorage.getItem('song'))
+      haveSong(songList)
+    } else {
+      fetch('http://localhost:3000/api/music/url?id=28048914').then(function (res) {
+        res.json().then(function (r) {
+          sessionStorage.setItem('song', JSON.stringify(r.data))
+          haveSong(r.data)
+        })
+      }).catch(function (e) {
+        console.log(e)
+      })
     }
   </script>
 </body>

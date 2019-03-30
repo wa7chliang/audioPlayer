@@ -1,6 +1,7 @@
 export default options => {
   const defaultOption = {
-    playType: 'loop'
+    playType: 'loop',
+    mutex: true
   }
   for (const defaultKey in defaultOption) {
     if (
