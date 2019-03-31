@@ -18,6 +18,8 @@
   <div id="buff">已缓冲 0%</div>
   <div id="current">已播放 0%</div>
   <div id="k2">开始2</div>
+  <div id="edit">修改1</div>
+  <div id="list"></div>
   <script>
     function haveSong(songList) {
       var Player = player.default
@@ -54,6 +56,18 @@
       document.getElementById('s').onclick = function () {
         a.prev()
       }
+      document.getElementById('edit').onclick = function () {
+        if (a.options.playType === 'random') {
+          a.options.playType = 'loop'
+        } else {
+          a.options.playType = 'random'
+        }
+      }
+      var html = ''
+      for(let i = 0; i < songList.length; i++) {
+        html += '<p>'+ songList[i].id +'</p>'
+      }
+      document.getElementById('list').innerHTML = html
       setInterval(function () {
         document.getElementById('buff').innerHTML = '已缓冲' + a.getBufferedPercent() + '%'
         document.getElementById('current').innerHTML = '已播放' + a.getCurrentTimePercent() + '%'
@@ -64,7 +78,7 @@
       var songList = JSON.parse(sessionStorage.getItem('song'))
       haveSong(songList)
     } else {
-      fetch('http://localhost:3000/api/music/url?id=28048914').then(function (res) {
+      fetch('http://localhost:3000/api/music/url?id=28048914,33894312,405998841').then(function (res) {
         res.json().then(function (r) {
           sessionStorage.setItem('song', JSON.stringify(r.data))
           haveSong(r.data)

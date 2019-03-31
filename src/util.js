@@ -1,7 +1,7 @@
 export function changeSongIndex(_this, num) {
-  if (typeof _this.options.songList[num] === 'string') {
-    _this.options.self.src = _this.options.songList[num]
+  if (typeof _this.optionList[num] === 'string') {
+    _this.options.self.src = _this.optionList[num]
   } else {
-    _this.options.self.src = _this.options.songList[num].url
+    _this.options.self.src = _this.optionList[num].url
   }
 }
