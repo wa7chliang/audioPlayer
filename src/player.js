@@ -117,9 +117,13 @@ class Player {
 
   // get music currentTime percent
   getCurrentTimePercent() {
-    return Math.floor(
-      (100 * this.options.self.currentTime) / this.options.self.duration
-    )
+    if (this.options.self.duration) {
+      return Math.floor(
+        (100 * this.options.self.currentTime) / this.options.self.duration
+      )
+    } else {
+      return 0
+    }
   }
 }
 

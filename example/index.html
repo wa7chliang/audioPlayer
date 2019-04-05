@@ -25,7 +25,8 @@
       var Player = player.default
       var a = new Player({
         el: '#player',
-        songList: songList
+        songList: songList,
+        errorIng: true
       })
 
       var b = new Player({
@@ -74,18 +75,47 @@
       }, 1000)
     }
 
-    if (sessionStorage.getItem('song')) {
-      var songList = JSON.parse(sessionStorage.getItem('song'))
-      haveSong(songList)
-    } else {
-      fetch('http://localhost:3000/api/music/url?id=28048914,33894312,405998841').then(function (res) {
+    // if (sessionStorage.getItem('song')) {
+    //   var songList = JSON.parse(sessionStorage.getItem('song'))
+    //   haveSong(songList)
+    // } else {
+    //   fetch('http://localhost:3000/api/music/url?id=28048914,33894312,405998841').then(function (res) {
+    //     res.json().then(function (r) {
+    //       sessionStorage.setItem('song', JSON.stringify(r.data))
+    //       haveSong(r.data)
+    //     })
+    //   }).catch(function (e) {
+    //     console.log(e)
+    //   })
+    // }
+    if (!sessionStorage.getItem('songString')) {
+      var idString = []
+      fetch('http://localhost:3000/api/music/playlist/detail?id=158834169').then(function (res) {
         res.json().then(function (r) {
-          sessionStorage.setItem('song', JSON.stringify(r.data))
-          haveSong(r.data)
+          r.playlist.trackIds.forEach(function (item) {
+            idString.push(item.id)
+          })
+          sessionStorage.setItem('songString', idString.join(','))
         })
       }).catch(function (e) {
         console.log(e)
       })
+    } else {
+      var songString = sessionStorage.getItem('songString')
+      if (sessionStorage.getItem('song')) {
+        var songList = JSON.parse(sessionStorage.getItem('song'))
+        haveSong(songList)
+      } else {
+        fetch(`http://localhost:3000/api/music/url?id=${songString}`).then(function (res) {
+          res.json().then(function (r) {
+            // console.log(r.data)
+            sessionStorage.setItem('song', JSON.stringify(r.data))
+            haveSong(r.data)
+          })
+        }).catch(function (e) {
+          console.log(e)
+        })
+      }
     }
   </script>
 </body>

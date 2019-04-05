@@ -1,3 +1,5 @@
+var timer
+
 export const event = [
   {
     name: 'ended',
@@ -6,6 +8,22 @@ export const event = [
         _this.next()
       } else {
         _this.play()
+      }
+    }
+  },
+  {
+    name: 'error',
+    func: _this => {
+      if (_this.options.errorIng) {
+        if (_this.optionList.length > 1) {
+          console.log('next in 2 seconds later')
+          clearTimeout(timer)
+          timer = setTimeout(() => {
+            _this.next()
+          }, 2000)
+        } else {
+          console.log('music error')
+        }
       }
     }
   }
