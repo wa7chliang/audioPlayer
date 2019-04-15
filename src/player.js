@@ -125,6 +125,15 @@ class Player {
       return 0
     }
   }
+
+  // change songIndex
+  changeSong(num, isPlay) {
+    changeSongIndex(this, num)
+    var isPlay = isPlay || true
+    if (isPlay) {
+      this.play()
+    }
+  }
 }
 
 export default Player

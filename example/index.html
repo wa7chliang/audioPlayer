@@ -26,13 +26,16 @@
       var a = new Player({
         el: '#player',
         songList: songList,
-        errorIng: true
+        errorHandle: function () {
+          console.log('自定义报错了')
+          a.next()
+        }
       })
 
-      var b = new Player({
-        el: '#player2',
-        songList: songList
-      })
+      // var b = new Player({
+      //   el: '#player2',
+      //   songList: songList
+      // })
 
       document.getElementById('k').onclick = function () {
         a.play()
@@ -66,9 +69,14 @@
       }
       var html = ''
       for(let i = 0; i < songList.length; i++) {
-        html += '<p>'+ songList[i].id +'</p>'
+        html += '<p class="songItem">'+ songList[i].id +'</p>'
       }
       document.getElementById('list').innerHTML = html
+      for(let i = 0; i < songList.length; i++) {
+        document.getElementsByClassName('songItem')[i].onclick = function () {
+          a.changeSong(i)
+        }
+      }
       setInterval(function () {
         document.getElementById('buff').innerHTML = '已缓冲' + a.getBufferedPercent() + '%'
         document.getElementById('current').innerHTML = '已播放' + a.getCurrentTimePercent() + '%'
@@ -92,7 +100,7 @@
       var idString = []
       fetch('http://localhost:3000/api/music/playlist/detail?id=158834169').then(function (res) {
         res.json().then(function (r) {
-          r.playlist.trackIds.forEach(function (item) {
+          r.cont.playlist.trackIds.forEach(function (item) {
             idString.push(item.id)
           })
           sessionStorage.setItem('songString', idString.join(','))
@@ -102,20 +110,14 @@
       })
     } else {
       var songString = sessionStorage.getItem('songString')
-      if (sessionStorage.getItem('song')) {
-        var songList = JSON.parse(sessionStorage.getItem('song'))
-        haveSong(songList)
-      } else {
-        fetch(`http://localhost:3000/api/music/url?id=${songString}`).then(function (res) {
-          res.json().then(function (r) {
-            // console.log(r.data)
-            sessionStorage.setItem('song', JSON.stringify(r.data))
-            haveSong(r.data)
-          })
-        }).catch(function (e) {
-          console.log(e)
+      fetch(`http://localhost:3000/api/music/url?id=${songString}`).then(function (res) {
+        res.json().then(function (r) {
+          sessionStorage.setItem('song', JSON.stringify(r.cont.data))
+          haveSong(r.cont.data)
         })
-      }
+      }).catch(function (e) {
+        console.log(e)
+      })
     }
   </script>
 </body>
